@@ -1,1 +1,1 @@
-# Attempt to solve Wunderdog Wudnernut vol 12.
+# Attempt to solve Wunderdog Wundernut vol 12.

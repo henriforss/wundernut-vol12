@@ -2,7 +2,6 @@
 # https://github.com/wunderdogsw/wundernut-vol12
 
 # Import Python Imaging Library (Pillow) and Numpy
-from audioop import reverse
 from PIL import Image
 import numpy as np
 from pytesseract import pytesseract
