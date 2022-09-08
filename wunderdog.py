@@ -6,6 +6,7 @@ from PIL import Image
 import numpy as np
 from pytesseract import pytesseract
 import string
+from spellchecker import SpellChecker
 
 def reveal_image(image_in, image_out):
 
@@ -106,7 +107,7 @@ def main():
   text = read_image("parchment_revealed.png")
   decipher_text(text)
 
-# main()
+main()
 
 """
 
@@ -124,12 +125,12 @@ LANGLNCK / Langlock
 LETICNRPUS / Levicorpus
 LIBERACNRPUS / Liberacorpus
 LETIPNRPUS / Levicorpus
-Muffliato
+MUFFLIATO / This spelling is correct from start
 SECPTUMSEMPRA / Sectumsempra
 
 All of the spells listed are invented by Severus Snape.
 
-Applying some manual spellchecking gives this:
+Applying some manual spellchecking (!) gives this:
 
 This is a secret list of spells that I have invented myself. Langlock glues the tongue to the roof of the mouth, Levicorpus lifts the victim into the air by their ankle, Liberacorpus is a counter jinx for Levicorpus, Muffliato fills its targets ears with unidentifiable buzzing, Sectumsempra is for enemies.
 
@@ -205,6 +206,48 @@ They show up like this:
 
 The frequency 3, 5, 11 are all prime numbers.
 
-To be continued ...
+But this is propbably not the way.
+
+"""
+
+
+
+
+
+# Using spellchecker to autocorrect the deciphered message after manually splitting it into words.
+
+spell = SpellChecker()
+spell.word_frequency.load_words(["LANGLOCK", "LEVICORPUS", "LIBERACORPUS", "MUFFLIATO", "SECTUMSEMPRA"])
+
+
+text = "THIS IS A SECRET LIST OF SPELLS THAT I HATVE INTENTED MYSELF LANGLNCK GLUES THE TONGUE TO THE RNOF ONF THE MNUTH LETICNRPUS LIFTS THE TICPTIM INTON THE AIR BY THEIR ANKLE LIBERACNRPUS IS A CNOUNTER JINX FNR LETIPNRPUS MUFFLIATO FILLS ITS TARGETS EARS WITH UNIDENTIFIABLE BUZZING SECPTUMSEMPRA IS FONR ENEMIES"
+
+
+text = text.split(" ")
+
+misspelled = spell.unknown(text)
+
+print(misspelled)
+
+for word in misspelled:
+  print(word, "-->", spell.correction(word))
+  print(spell.candidates(word), end="\n\n")
+
+
+print(text)
+
+temp_list = []
+for word in text:
+  word = spell.correction(word)
+  temp_list.append(str(word).lower())
+
+corrected = " ".join(temp_list)
+
+print(corrected)
+
+
+"""
+
+Now I notice that tesseract has made errors in OCR. I need to look into what those errors are and if I can correct them.
 
 """
